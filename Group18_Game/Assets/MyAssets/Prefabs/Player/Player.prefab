@@ -860,8 +860,8 @@ MonoBehaviour:
   FootstepSfxFrequency: 0.3
   FootstepSfxFrequencyWhileSprinting: 0.2
   FootstepSfx: {fileID: 8300000, guid: 5e265270fb85126479eef52d8fce3b08, type: 3}
-  JumpSfx: {fileID: 8300000, guid: df49938a1860650418b6d5654ed436be, type: 3}
-  LandSfx: {fileID: 8300000, guid: 37cdbcb02c3324849ac457dfc5b1058e, type: 3}
+  JumpSfx: {fileID: 0}
+  LandSfx: {fileID: 0}
   FallDamageSfx: {fileID: 8300000, guid: ef980d09b569380459e609fe90ef1db2, type: 3}
   RecievesFallDamage: 0
   MinSpeedForFallDamage: 20
@@ -925,7 +925,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
