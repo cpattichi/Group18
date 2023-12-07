@@ -17,7 +17,15 @@ namespace ViewFinder.Managers
         public float GravityDownForce = 20f;
 
         [Tooltip("Physic layers checked to consider the player grounded")]
-        public LayerMask GroundCheckLayers = -1;
+        public LayerMask GroundCheckLayers;
+
+
+        void Awake()
+        {
+            // Move the layer initialization to Awake
+            GroundCheckLayers = LayerMask.GetMask("Default", "Targetable");
+        }
+
 
         [Tooltip("distance from the bottom of the character controller capsule to test for grounded")]
         public float GroundCheckDistance = 0.05f;
@@ -137,6 +145,9 @@ namespace ViewFinder.Managers
         const float k_JumpGroundingPreventionTime = 0.2f;
         const float k_GroundCheckDistanceInAir = 0.07f;
 
+        private AudioSource footstepsAudioSource;
+        private AudioSource jumpAudioSource;
+
         void Start()
         {
             // fetch components on the same gameObject
@@ -160,6 +171,9 @@ namespace ViewFinder.Managers
             // force the crouch state to false when starting
             SetCrouchingState(false, true);
             UpdateCharacterHeight(true);
+
+            footstepsAudioSource = GetComponent<AudioSource>();
+            jumpAudioSource = GetComponent<AudioSource>();
         }
 
         void Update()
@@ -285,6 +299,7 @@ namespace ViewFinder.Managers
                     // jumping
                     if (IsGrounded && m_InputHandler.GetJumpInputDown())
                     {
+
                         // force the crouch state to false
                         if (SetCrouchingState(false, false))
                         {
@@ -303,6 +318,11 @@ namespace ViewFinder.Managers
                             IsGrounded = false;
                             m_GroundNormal = Vector3.up;
                         }
+
+                        if (jumpAudioSource != null && JumpSfx != null)
+                        {
+                            jumpAudioSource.PlayOneShot(JumpSfx);
+                        }
                     }
 
                     // footsteps sound
@@ -311,6 +331,11 @@ namespace ViewFinder.Managers
                     if (m_FootstepDistanceCounter >= 1f / chosenFootstepSfxFrequency)
                     {
                         m_FootstepDistanceCounter = 0f;
+
+                        if (footstepsAudioSource != null && FootstepSfx != null)
+                        {
+                            footstepsAudioSource.PlayOneShot(FootstepSfx);
+                        }
                     }
 
                     // keep track of distance traveled for footsteps sound
