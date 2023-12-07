@@ -1,54 +1,206 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+using UnityEngine.SceneManagement;
 
-[CustomEditor(typeof(MainMenuController))]
-public class MainMenuControllerEditor : Editor {
+public class MainMenuController : MonoBehaviour
+{
 
-    public override void OnInspectorGUI()
+    Animator anim;
+
+    public string newGameSceneName;
+    public int quickSaveSlotID;
+
+    [Header("Options Panel")]
+    public GameObject MainOptionsPanel;
+    public GameObject StartGameOptionsPanel;
+    public GameObject GamePanel;
+    public GameObject ControlsPanel;
+    public GameObject GfxPanel;
+    public GameObject LoadGamePanel;
+
+    // Use this for initialization
+    void Start()
     {
-        EMM_AddCanvases.OpenWindow();
+        anim = GetComponent<Animator>();
 
-        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
-        EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-
-        EditorGUILayout.LabelField("Main Menu Controller", EditorStyles.helpBox);
-
-        GUIStyle bSKin = new GUIStyle("box");
-        bSKin.normal.textColor = Color.green;
-
-       
-        EditorGUILayout.EndHorizontal();
-
-        
-            EditorGUILayout.HelpBox("The Controller script which will be controlling the whole menu system behaviour.\n\n" +
-                                    "This is just a demo version to showcase what you can expect" +
-                                    " in the paid version. \n\n" +
-                                    "If you liked this demo or you used this in any of your games, " +
-                                    "then consider buying the full version from here!", MessageType.Info);
-
-            if (GUILayout.Button("Buy Full Version [Asset Store]"))
-            {
-                Application.OpenURL("https://www.assetstore.unity3d.com/#!/content/98746");
-            }
-            if (GUILayout.Button("Buy Full Version [Sellfy Store - 20% OFF]"))
-            {
-                Application.OpenURL("https://sellfy.com/p/5ujr/");
-            }
-
-            EditorGUILayout.HelpBox("Your support is all what I am counting on! For further development of this Asset please support us " +
-                                    "by buying it!\n\n" +
-                                    "Thanks\n" +
-                                    "Hamzah\n" +
-                                    "Support : walledcityinfotech@gmail.com", MessageType.Info);
-
-        base.OnInspectorGUI();
-
-        EditorGUILayout.EndVertical();
-
-        
+        //new key
+        PlayerPrefs.SetInt("quickSaveSlot", quickSaveSlotID);
     }
 
+    #region Open Different panels
+
+    public void OnPlayButton()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void OnQuitButton()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+             Application.Quit();
+#endif
+    }
+
+    public void OnReplayButton()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+
+    public void openOptions()
+    {
+        //enable respective panel
+        MainOptionsPanel.SetActive(true);
+        StartGameOptionsPanel.SetActive(false);
+
+        //play anim for opening main options panel
+        anim.Play("buttonTweenAnims_on");
+
+        //play click sfx
+        playClickSound();
+
+        //enable BLUR
+        //Camera.main.GetComponent<Animator>().Play("BlurOn");
+
+    }
+
+    public void openStartGameOptions()
+    {
+        //enable respective panel
+        MainOptionsPanel.SetActive(false);
+        StartGameOptionsPanel.SetActive(true);
+
+        //play anim for opening main options panel
+        anim.Play("buttonTweenAnims_on");
+
+        //play click sfx
+        playClickSound();
+
+        //enable BLUR
+        //Camera.main.GetComponent<Animator>().Play("BlurOn");
+
+    }
+
+    public void openOptions_Game()
+    {
+        //enable respective panel
+        GamePanel.SetActive(true);
+        ControlsPanel.SetActive(false);
+        GfxPanel.SetActive(false);
+        LoadGamePanel.SetActive(false);
+
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+
+    public void openOptions_Controls()
+    {
+        //enable respective panel
+        GamePanel.SetActive(false);
+        ControlsPanel.SetActive(true);
+        GfxPanel.SetActive(false);
+        LoadGamePanel.SetActive(false);
+
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+    public void openOptions_Gfx()
+    {
+        //enable respective panel
+        GamePanel.SetActive(false);
+        ControlsPanel.SetActive(false);
+        GfxPanel.SetActive(true);
+        LoadGamePanel.SetActive(false);
+
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+
+    public void openContinue_Load()
+    {
+        //enable respective panel
+        GamePanel.SetActive(false);
+        ControlsPanel.SetActive(false);
+        GfxPanel.SetActive(false);
+        LoadGamePanel.SetActive(true);
+
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+
+    public void newGame()
+    {
+        if (!string.IsNullOrEmpty(newGameSceneName))
+            SceneManager.LoadScene(newGameSceneName);
+        else
+            Debug.Log("Please write a scene name in the 'newGameSceneName' field of the Main Menu Script and don't forget to " +
+                "add that scene in the Build Settings!");
+    }
+    #endregion
+
+    #region Back Buttons
+
+    public void back_options()
+    {
+        //simply play anim for CLOSING main options panel
+        anim.Play("buttonTweenAnims_off");
+
+        //disable BLUR
+        // Camera.main.GetComponent<Animator>().Play("BlurOff");
+
+        //play click sfx
+        playClickSound();
+    }
+
+    public void back_options_panels()
+    {
+        //simply play anim for CLOSING main options panel
+        anim.Play("OptTweenAnim_off");
+
+        //play click sfx
+        playClickSound();
+
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+    #endregion
+
+    #region Sounds
+    public void playHoverClip()
+    {
+
+    }
+
+    void playClickSound()
+    {
+
+    }
+
+
+    #endregion
 }

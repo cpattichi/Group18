@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuController : MonoBehaviour {
+public class MainMenuController : MonoBehaviour
+{
 
     Animator anim;
 
@@ -19,8 +20,12 @@ public class MainMenuController : MonoBehaviour {
     public GameObject LoadGamePanel;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         anim = GetComponent<Animator>();
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         //new key
         PlayerPrefs.SetInt("quickSaveSlot", quickSaveSlotID);
@@ -35,11 +40,16 @@ public class MainMenuController : MonoBehaviour {
 
     public void OnQuitButton()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
              Application.Quit();
-#       endif
+#endif
+    }
+
+    public void OnReplayButton()
+    {
+        SceneManager.LoadScene(1);
     }
 
 
@@ -57,7 +67,7 @@ public class MainMenuController : MonoBehaviour {
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-       
+
     }
 
     public void openStartGameOptions()
@@ -74,9 +84,9 @@ public class MainMenuController : MonoBehaviour {
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-        
+
     }
-    
+
     public void openOptions_Game()
     {
         //enable respective panel
@@ -92,7 +102,7 @@ public class MainMenuController : MonoBehaviour {
         playClickSound();
 
     }
-    
+
     public void openOptions_Controls()
     {
         //enable respective panel
@@ -158,7 +168,7 @@ public class MainMenuController : MonoBehaviour {
         anim.Play("buttonTweenAnims_off");
 
         //disable BLUR
-       // Camera.main.GetComponent<Animator>().Play("BlurOff");
+        // Camera.main.GetComponent<Animator>().Play("BlurOff");
 
         //play click sfx
         playClickSound();
@@ -168,7 +178,7 @@ public class MainMenuController : MonoBehaviour {
     {
         //simply play anim for CLOSING main options panel
         anim.Play("OptTweenAnim_off");
-        
+
         //play click sfx
         playClickSound();
 
@@ -183,10 +193,11 @@ public class MainMenuController : MonoBehaviour {
     #region Sounds
     public void playHoverClip()
     {
-       
+
     }
 
-    void playClickSound() {
+    void playClickSound()
+    {
 
     }
 
